@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Text, Modal } from 'react-native';
 import { Screen } from './components/Screen';
-import { CreateMeme, MemeList, MemeData, memeApi } from './features/memes';
+import { CreateMeme, MemeList, MemeData } from './features/memes';
 
 export function App() {
-  const [memes, setMemes] = useState<MemeData[]>([]);
   const [selectedMeme, selectMeme] = useState<MemeData | null>(null);
-
-  useEffect(() => {
-    memeApi.getList().then(setMemes);
-  }, []);
 
   return (
     <Screen>
@@ -17,7 +12,7 @@ export function App() {
         Выберите 1 шаблон из списка
       </Text>
 
-      <MemeList memes={memes} onMemePress={selectMeme} />
+      <MemeList onMemePress={selectMeme} />
 
       <Modal
         animationType="slide"
