@@ -1,32 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, Modal } from 'react-native';
 import { Screen } from './components/Screen';
-import { CreateMeme, MemeList, MemeData } from './features/memes';
+import { CreateMeme, MemeList } from './features/memes';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-export function App() {
-  const [selectedMeme, selectMeme] = useState<MemeData | null>(null);
+const AppNavigator = createStackNavigator(
+  {
+    List: {
+      screen: MemeList,
+      navigationOptions: {
+        title: 'Список шаблонов'
+      }
+    },
+    Creator: {
+      screen: CreateMeme,
+      navigationOptions: {
+        title: 'Генерация'
+      }
+    }
+  },
+  {
+    initialRouteName: 'List'
+  }
+);
 
-  return (
-    <Screen>
-      <Text style={{ fontSize: 24, textAlign: 'center' }}>
-        Выберите 1 шаблон из списка
-      </Text>
+export const App = createAppContainer(AppNavigator);
 
-      <MemeList onMemePress={selectMeme} />
+// export function App() {
+//   const [selectedMeme, selectMeme] = useState<MemeData | null>(null);
 
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={selectedMeme !== null}
-        onRequestClose={() => {
-          selectMeme(null);
-        }}
-        presentationStyle="fullScreen"
-      >
-        {selectedMeme && (
-          <CreateMeme close={() => selectMeme(null)} id={selectedMeme.id} />
-        )}
-      </Modal>
-    </Screen>
-  );
-}
+//   return (
+//     <Screen>
+
+//       <MemeList onMemePress={selectMeme} />
+
+//       <Modal
+//         animationType="slide"
+//         transparent={false}
+//         visible={selectedMeme !== null}
+//         onRequestClose={() => {
+//           selectMeme(null);
+//         }}
+//         presentationStyle="fullScreen"
+//       >
+//         {selectedMeme && (
+//           <CreateMeme close={() => selectMeme(null)} id={selectedMeme.id} />
+//         )}
+//       </Modal>
+//     </Screen>
+//   );
+// }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavigationScreenComponent } from 'react-navigation';
 import {
   View,
   Button,
@@ -6,30 +7,27 @@ import {
   TouchableOpacity,
   Share,
   Image,
-  Text
+  Text,
+  KeyboardAvoidingView
 } from 'react-native';
 import { create } from '../api';
+import { MemeData } from '../Meme.types';
 
-type CreateMemeProps = {
-  close: () => void;
-  id: string;
-};
+type CreateMemeProps = {};
 
-export const CreateMeme: React.FC<CreateMemeProps> = props => {
+export const CreateMeme: NavigationScreenComponent<
+  { meme: MemeData },
+  {},
+  CreateMemeProps
+> = props => {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
   const [result, setResult] = useState<string | null>(null);
+  const meme = props.navigation.getParam('meme');
+  const { id, url } = meme;
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      {/* <TouchableOpacity
-        onPress={props.close}
-        style={{ position: 'absolute', top: 16, right: 16 }}
-      >
-        <View>
-          <Text style={{ fontSize: 18 }}>X</Text>
-        </View>
-      </TouchableOpacity> */}
       <Text style={{ fontSize: 24, textAlign: 'center' }}>
         Ввод данных для генерации
       </Text>
@@ -40,7 +38,7 @@ export const CreateMeme: React.FC<CreateMemeProps> = props => {
         onChangeText={setText1}
         style={{ borderColor: 'black', borderWidth: 1 }}
       />
-      <Text style={{ marginTop: 8 }}>Строка 1</Text>
+      <Text style={{ marginTop: 8 }}>Строка 2</Text>
       <TextInput
         value={text2}
         onChangeText={setText2}
@@ -48,15 +46,16 @@ export const CreateMeme: React.FC<CreateMemeProps> = props => {
       />
       <Button
         onPress={async () => {
-          const url = await create(props.id, text1, text2);
+          const url = await create(id, text1, text2);
           setResult(url);
         }}
         title="Cоздать"
       />
       <View style={{ marginTop: 8 }}>
-        <Button onPress={props.close} title="Отмена" />
+        <Button onPress={() => props.navigation.goBack()} title="Отмена" />
       </View>
-      {result && (
+
+      {result ? (
         <TouchableOpacity
           style={{ flex: 1, marginVertical: 8 }}
           onPress={() => Share.share({ message: result })}
@@ -64,9 +63,15 @@ export const CreateMeme: React.FC<CreateMemeProps> = props => {
           <Image
             source={{ uri: result }}
             resizeMode="contain"
-            style={{ flex: 1, height: 300 }}
+            style={{ flex: 1, height: 300, marginVertical: 8 }}
           />
         </TouchableOpacity>
+      ) : (
+        <Image
+          source={{ uri: url }}
+          resizeMode="contain"
+          style={{ flex: 1, height: 300, marginVertical: 8 }}
+        />
       )}
     </View>
   );
