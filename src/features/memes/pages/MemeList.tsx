@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, TouchableOpacity, Image, View, Text } from 'react-native';
-import { NavigationScreenComponent } from 'react-navigation';
-import { MemeData } from '../Meme.types';
-import { getList } from '../api';
+import React, { useState, useEffect } from "react";
+import {
+  FlatList,
+  TouchableOpacity,
+  Image,
+  View,
+  StyleSheet
+} from "react-native";
+import { NavigationScreenComponent } from "react-navigation";
+import { MemeData } from "../Meme.types";
+import { getList } from "../api";
 
 type MemeListProps = {};
 
@@ -25,21 +31,39 @@ export const MemeList: NavigationScreenComponent<
     <View style={{ flex: 1 }}>
       <FlatList
         style={{ flex: 1 }}
-        contentContainerStyle={{ padding: 8 }}
         data={memes}
         keyExtractor={keyExtractor}
         renderItem={({ item: meme }) => (
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Creator', { meme })}
+            onPress={() => props.navigation.navigate("Creator", { meme })}
           >
-            <Image
-              style={{ flex: 1, height: 300 }}
-              resizeMode="contain"
-              source={{ uri: meme.url }}
-            />
+            <View style={styles.card}>
+              <Image
+                style={{ height: 300 }}
+                resizeMode="contain"
+                source={{ uri: meme.url }}
+              />
+            </View>
           </TouchableOpacity>
         )}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5
+  }
+});

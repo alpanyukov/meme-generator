@@ -64,14 +64,14 @@ export const CreateMeme: NavigationScreenComponent<
           <Image
             source={{ uri: result }}
             resizeMode="contain"
-            style={{ flex: 1, height: 300, marginVertical: 8 }}
+            style={{ flex: 1, marginVertical: 8 }}
           />
         </TouchableOpacity>
       ) : (
         <Image
           source={{ uri: url }}
           resizeMode="contain"
-          style={{ flex: 1, height: 300, marginVertical: 8 }}
+          style={{ flex: 1, marginVertical: 8 }}
         />
       )}
     </View>
